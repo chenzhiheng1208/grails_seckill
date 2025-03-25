@@ -11,6 +11,7 @@ class JwtInterceptor implements ServletAttributes {
                 .excludes(controller: "auth")
                 .excludes(controller: "user")
                 .excludes(controller: "product")
+                .excludes(controller: "seckillOrder")
         match(uri: "/")
     }
 
