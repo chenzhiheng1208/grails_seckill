@@ -79,6 +79,12 @@
                     window.location.href = "/user/loginPage";
                 }
             });
+        fetch("/seckillOrder/initializeAllStocks", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" }
+        }).then(response => response.json())
+            .then(data => console.log("库存初始化信息：", data.message))
+            .catch(error => console.error("初始化库存失败：", error));
     }
 
     window.onload = loadProductPage;

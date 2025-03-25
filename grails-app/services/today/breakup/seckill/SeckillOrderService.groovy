@@ -1,19 +1,22 @@
 package today.breakup.seckill
 
+import today.breakup.seckill.SeckillNotificationService
 import grails.gorm.transactions.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.StringRedisTemplate
+import org.springframework.data.redis.core.ZSetOperations
 import org.springframework.data.redis.core.script.DefaultRedisScript
 import org.springframework.data.redis.core.script.RedisScript
 import org.springframework.transaction.annotation.Propagation
+import org.springframework.scheduling.annotation.Scheduled
 
 import java.util.concurrent.TimeUnit
 
 @Transactional
 class SeckillOrderService {
 
+    SeckillNotificationService seckillNotificationService
     private final StringRedisTemplate redisTemplate;
-
     @Autowired
     public SeckillOrderService(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
@@ -91,8 +94,13 @@ class SeckillOrderService {
 
         // 异步创建订单（使用独立事务）
         createOrderAsync(userId, productId)
+        long delayInSeconds = 5
+        long notificationTime = System.currentTimeMillis() + delayInSeconds * 1000
 
-        return "秒杀成功，订单处理中"
+        String message = "用户 ${userId} 秒杀成功，商品 ${productId} 已确认"
+        redisTemplate.opsForZSet().add(seckillNotificationService.ORDER_NOTIFICATION_KEY, message, notificationTime)
+
+        return "秒杀成功"
     }
 
     /**

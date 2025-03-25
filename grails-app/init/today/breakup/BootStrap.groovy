@@ -1,9 +1,11 @@
 package today.breakup
 
+import org.springframework.scheduling.annotation.EnableScheduling
 import today.breakup.seckill.AuthService
 import today.breakup.seckill.User
 import today.breakup.seckill.Product
 
+@EnableScheduling
 class BootStrap {
     def authService = new AuthService()
     def init = { servletContext ->

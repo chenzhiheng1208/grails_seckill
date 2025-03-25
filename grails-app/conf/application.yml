@@ -185,3 +185,8 @@ jwt:
             - "/user/loginPage" # 允许访问库存管理页面
             - "/views/**" # 允许所有 GSP 视图访问
             - "/seckillOrder/**"
+---
+spring:
+    task:
+        scheduling:
+            enabled: true
