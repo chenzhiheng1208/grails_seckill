@@ -11,13 +11,20 @@ class SeckillOrderController {
             initializeAllStocks: "POST",
             placeOrder         : "POST"
     ]
-
+    /**
+     * POST /seckillOrder/initializeStock
+     * 初始化单个商品库存
+     */
     def initializeStock() {
         def requestBody = request.JSON
         seckillOrderService.initializeStock(requestBody.productId, requestBody.stock)
         render([message: "库存已初始化"] as JSON)
     }
 
+    /**
+     * POST /seckillOrder/initializeAllStocks
+     * 初始化所有商品库存
+     */
     def initializeAllStocks() {
         println "初始化所有商品库存"
         def products = Product.list()
@@ -27,6 +34,10 @@ class SeckillOrderController {
         render([message: "所有商品库存已初始化"] as JSON)
     }
 
+    /**
+     * POST /seckillOrder/placeOrder
+     * 发起秒杀
+     */
     def placeOrder() {
         def requestBody = request.JSON
         try {

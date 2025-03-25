@@ -29,18 +29,17 @@
                 password: $('input[name="password"]').val()
             };
             $.ajax({
-                url: '${createLink(controller: "user", action: "login")}',
+                url: '${createLink(controller: "auth", action: "login")}',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: function(response) {
                     // 登录成功，依据返回的角色信息进行跳转
                     console.log('登录成功', response);
-                    if (response.userrole === 'ADMIN') {
-                        // 管理员跳转到库存管理页面
+                    localStorage.setItem("jwt", data.token);
+                    if (response.role === 'ADMIN') {
                         window.location.href = '/product/inventoryManagePage';
                     } else {
-                        // 普通用户跳转到购买商品页面
                         window.location.href = '/product/buyProductPage';
                     }
                 },

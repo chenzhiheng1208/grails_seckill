@@ -156,6 +156,29 @@
                 alert("添加失败");
             });
     };
+    function loadProductPage() {
+        let token = localStorage.getItem("jwt");
+        if (!token) {
+            alert("未登录，请先登录！");
+            window.location.href = "/user/loginPage";
+            return;
+        }
+
+        fetch("/product/inventoryManagePage", {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+            .then(response => {
+                if (response.status === 401) {
+                    alert("Token 无效，请重新登录！");
+                    window.location.href = "/user/loginPage";
+                }
+            });
+    }
+
+    window.onload = loadProductPage;
 </script>
 </body>
 </html>

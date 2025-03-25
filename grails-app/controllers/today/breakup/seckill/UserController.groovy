@@ -5,9 +5,19 @@ import grails.converters.JSON
 class UserController {
 
     UserService userService
-
+    AuthService authService
     static allowedMethods = [register: "POST", login: "POST"]
 
+    /**
+     * POST /user/register
+     * 用户注册，参数通过 JSON 传递，例如：
+     * {
+     *  "username": "admin",
+     *  "password": "123456",
+     *  "email": "admin@example.com",
+     *  "roleName": "ADMIN"
+     * }
+     */
     def register() {
         def requestBody = request.JSON
         try {
@@ -18,6 +28,14 @@ class UserController {
         }
     }
 
+    /**
+     * POST /user/login
+     * 用户登录，参数通过 JSON 传递，例如：
+     * {
+     *   "username": "admin",
+     *   "password": "admin123"
+     * }
+     */
     def login() {
         def requestBody = request.JSON
         def user = userService.authenticate(requestBody.username, requestBody.password)
@@ -32,11 +50,11 @@ class UserController {
     def loginPage() {
         render(view: "login")
     }
-//    private String getRedirectUrl(String roleName) {
-//        if (roleName == "ADMIN") {
-//            return "/product/inventoryManagePage"
-//        } else {
-//            return "/product/buyProductPage"
-//        }
-//    }
+    private String getRedirectUrl(String roleName) {
+        if (roleName == "ADMIN") {
+            return "/product/inventoryManagePage"
+        } else {
+            return "/product/buyProductPage"
+        }
+    }
 }

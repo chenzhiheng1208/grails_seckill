@@ -43,16 +43,6 @@
             .catch(error => console.error("初始化库存失败：", error));
     };
 
-    // function placeOrder(productId) {
-    //     // 此处 userId 仅做示例，实际应从登录信息中获取
-    //     fetch("/seckillOrder/placeOrder", {
-    //         method: "POST",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({ productId: productId, userId: 1 })
-    //     }).then(response => response.json())
-    //         .then(data => alert(data.message))
-    //         .catch(error => alert("秒杀失败"));
-    // }
     function placeOrder(productId) {
         fetch("/seckillOrder/placeOrder", {
             method: "POST",
@@ -69,6 +59,29 @@
                 location.reload();
             });
     }
+    function loadProductPage() {
+        let token = localStorage.getItem("jwt");
+        if (!token) {
+            alert("未登录，请先登录！");
+            window.location.href = "/user/loginPage";
+            return;
+        }
+
+        fetch("/product/buyProductPage", {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+            .then(response => {
+                if (response.status === 401) {
+                    alert("Token 无效，请重新登录！");
+                    window.location.href = "/user/loginPage";
+                }
+            });
+    }
+
+    window.onload = loadProductPage;
 </script>
 </body>
 </html>
